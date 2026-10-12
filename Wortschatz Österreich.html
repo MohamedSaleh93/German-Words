@@ -1,0 +1,647 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Wortschatz Österreich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: slim sticky top bar (name + two tabs), one centred column; flashcard first, controls under it; exam is a step-by-step card with its own Check button. */
+:root{
+  --bg:#F3F4F8; --surface:#FFFFFF; --fg:#171B26; --muted:#586175; --line:#DADFE9;
+  --ink:#1B2437; --ink-fg:#FFFFFF; --soft:#E9ECF4;
+  --red:#C8102E; --stripe-mid:#FFFFFF;
+  --der:#2358C9; --die:#C42B40; --das:#1B8447;
+  --ok:#1B7A44; --ok-bg:#E2F3E9; --bad:#B3261E; --bad-bg:#FCE7E4;
+  --focus:#2358C9;
+  --f-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --f-body:'Instrument Sans','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11141B; --surface:#1A1F2A; --fg:#ECEFF6; --muted:#9BA4B8; --line:#2B3243;
+    --ink:#E8ECF5; --ink-fg:#11141B; --soft:#242B3A;
+    --red:#E0334F; --stripe-mid:#ECEFF6;
+    --der:#7AA2FF; --die:#FF8193; --das:#52CF86;
+    --ok:#5CD08A; --ok-bg:#12301F; --bad:#FF8F85; --bad-bg:#3A1916;
+    --focus:#7AA2FF; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11141B; --surface:#1A1F2A; --fg:#ECEFF6; --muted:#9BA4B8; --line:#2B3243;
+  --ink:#E8ECF5; --ink-fg:#11141B; --soft:#242B3A;
+  --red:#E0334F; --stripe-mid:#ECEFF6;
+  --der:#7AA2FF; --die:#FF8193; --das:#52CF86;
+  --ok:#5CD08A; --ok-bg:#12301F; --bad:#FF8F85; --bad-bg:#3A1916;
+  --focus:#7AA2FF; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:0 40px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.stripe{height:5px;margin-inline:-16px;background:linear-gradient(var(--red) 0 33.3%,var(--stripe-mid) 33.3% 66.6%,var(--red) 66.6%)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:12px 16px 10px;border-bottom:1px solid var(--line)}
+.top-in{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.brand{min-width:0}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:800;font-size:1.45rem;letter-spacing:-.01em;line-height:1.1}
+.brand p{margin:2px 0 0;font-size:.8rem;color:var(--muted)}
+.tabs{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:12px}
+.tabs button{border:0;background:transparent;padding:8px 16px;border-radius:9px;font-weight:600;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+main{max-width:760px;margin:0 auto;padding-top:18px}
+.panel[hidden]{display:none!important}
+.bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-bottom:12px}
+label.fld{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.03em;text-transform:uppercase;min-width:0}
+select,input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;min-width:0;max-width:100%;color:var(--fg)}
+select{padding-right:8px}
+.seg{display:flex;background:var(--soft);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:8px;font-weight:600;color:var(--muted);font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.18)}
+.chk{display:flex;align-items:center;gap:7px;font-size:.9rem;color:var(--fg)}
+.chk input{width:18px;height:18px;accent-color:var(--ink)}
+.voice{font-size:.8rem;color:var(--muted);margin:0 0 14px}
+.btn{border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:12px;font-weight:600;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--ink);color:var(--ink-fg);border-color:var(--ink)}
+.btn.primary:disabled{opacity:.4;cursor:not-allowed}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.good{border-color:var(--ok);color:var(--ok)}
+.btn.warn{border-color:var(--die);color:var(--die)}
+
+/* flashcard */
+.stage{perspective:1400px}
+.card{display:block;width:100%;border:0;background:none;padding:0;text-align:center;position:relative;min-height:330px}
+.card-in{position:absolute;inset:0;transition:transform .5s cubic-bezier(.3,.7,.2,1);transform-style:preserve-3d}
+.card.flipped .card-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:34px 18px 26px;box-shadow:0 8px 24px -14px rgba(20,30,60,.35);overflow:hidden}
+.face.back{transform:rotateY(180deg)}
+.tag{position:absolute;top:14px;left:18px;right:18px;display:flex;justify-content:space-between;gap:8px;font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tag span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pic{font-size:5.4rem;line-height:1.1;min-height:6rem;display:flex;align-items:center}
+.pic.big{font-size:8.5rem;min-height:9.5rem;justify-content:center}
+.word{font-family:var(--f-display);font-weight:800;font-size:clamp(1.9rem,7vw,2.8rem);line-height:1.15;overflow-wrap:anywhere;text-wrap:balance}
+.word.en{font-weight:600}
+.sub{color:var(--muted);font-size:1rem;overflow-wrap:anywhere}
+.hint{position:absolute;bottom:10px;left:0;right:0;font-size:.74rem;color:var(--muted)}
+.at{display:inline-block;background:var(--red);color:#fff;font-size:.68rem;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:5px;vertical-align:middle;font-family:var(--f-body)}
+.der{color:var(--der)}.die{color:var(--die)}.das{color:var(--das)}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.nav .wide{grid-column:1/-1}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.meter{margin-top:16px}
+.meter-top{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;gap:10px;flex-wrap:wrap}
+.track{height:7px;background:var(--soft);border-radius:99px;margin-top:6px;overflow:hidden}
+.fill{height:100%;background:var(--ink);border-radius:99px;transition:width .25s}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:36px 20px;text-align:center}
+.empty h2{margin:0 0 6px;font-family:var(--f-display)}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:6px 0;font-size:.85rem}
+
+/* exam */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px 20px}
+.box h2{margin:0 0 4px;font-family:var(--f-display);font-weight:800;font-size:1.4rem}
+.box p.lead{margin:0 0 16px;color:var(--muted)}
+.types{display:grid;gap:8px;margin:6px 0 18px}
+.types .chk{background:var(--soft);border-radius:12px;padding:10px 12px;align-items:flex-start}
+.types .chk small{display:block;color:var(--muted);font-size:.8rem}
+.setup-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.qhead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-bottom:12px;font-variant-numeric:tabular-nums}
+.qtype{background:var(--soft);padding:3px 10px;border-radius:99px;font-weight:600;color:var(--fg)}
+.prompt{text-align:left;margin:6px 0 16px}
+.prompt .pic{font-size:3.4rem;min-height:0;margin-bottom:4px}
+.prompt .big{font-family:var(--f-display);font-weight:800;font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.15;overflow-wrap:anywhere}
+.prompt .ask{color:var(--muted);font-size:.92rem;margin-bottom:4px}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{text-align:left;background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:13px 14px;font-weight:600;font-size:1.02rem;min-width:0;overflow-wrap:anywhere;display:flex;gap:10px;align-items:baseline}
+.opt kbd{font-family:var(--f-body);font-size:.72rem;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:0 5px;flex:none}
+.opt:hover{border-color:var(--muted)}
+.opt[aria-checked="true"]{border-color:var(--ink);background:var(--soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt:disabled{cursor:default}
+.opts.art{grid-template-columns:repeat(3,minmax(0,1fr))}
+.opts.art .opt{justify-content:center;font-size:1.3rem;font-family:var(--f-display);font-weight:800}
+.answer{width:100%;font-size:1.2rem;padding:13px 14px;border-width:2px}
+.answer.right{border-color:var(--ok);background:var(--ok-bg)}
+.answer.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.actions .btn{flex:1 1 140px}
+.fb{margin-top:14px;border-radius:14px;padding:14px 16px;text-align:left}
+.fb.ok{background:var(--ok-bg);border:1px solid var(--ok)}
+.fb.no{background:var(--bad-bg);border:1px solid var(--bad)}
+.fb h3{margin:0 0 4px;font-size:1.05rem}
+.fb.ok h3{color:var(--ok)}.fb.no h3{color:var(--bad)}
+.fb p{margin:2px 0;overflow-wrap:anywhere}
+.fb .corr{font-family:var(--f-display);font-weight:800;font-size:1.35rem}
+.score{font-family:var(--f-display);font-weight:800;font-size:3.4rem;line-height:1;margin:6px 0}
+.miss{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.miss li{background:var(--soft);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
+.miss small{color:var(--muted)}
+.foot{margin-top:28px;font-size:.78rem;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:520px){
+  .opts{grid-template-columns:1fr}
+  .opts.art{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pic{font-size:4.4rem}
+  .pic.big{font-size:7rem;min-height:8rem}
+  .box{padding:18px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .card-in,.fill{transition:none}
+}
+</style>
+
+<div class="stripe" aria-hidden="true"></div>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1>Wortschatz Österreich</h1>
+      <p id="stats">1000 words · A1–A2 · ÖIF</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Mode">
+      <button role="tab" id="tab-cards" aria-selected="true" aria-controls="panel-cards">Flashcards</button>
+      <button role="tab" id="tab-exam" aria-selected="false" aria-controls="panel-exam">Exam</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="panel" id="panel-cards" role="tabpanel" aria-labelledby="tab-cards">
+    <div class="bar">
+      <label class="fld">Theme<select id="theme"></select></label>
+      <div class="fld">Front side
+        <div class="seg" role="group" aria-label="Front side">
+          <button type="button" id="side-pic" aria-pressed="true">Picture</button>
+          <button type="button" id="side-de" aria-pressed="false">Deutsch</button>
+          <button type="button" id="side-en" aria-pressed="false">English</button>
+        </div>
+      </div>
+    </div>
+    <div class="bar">
+      <label class="chk"><input type="checkbox" id="opt-shuffle">Shuffle</label>
+      <label class="chk"><input type="checkbox" id="opt-hide">Hide known words</label>
+      <label class="chk"><input type="checkbox" id="opt-auto">Read aloud automatically</label>
+    </div>
+    <p class="voice" id="voice" aria-live="polite"></p>
+    <div id="cardzone"></div>
+  </section>
+
+  <section class="panel" id="panel-exam" role="tabpanel" aria-labelledby="tab-exam" hidden>
+    <div id="examzone"></div>
+  </section>
+
+  <p class="foot">Pictures are emoji. Sound uses the text-to-speech voices installed on your device. This 1,000-word list was compiled for everyday A1–A2 topics and ÖIF course topics. It is not the official ÖIF or ÖSD word list.</p>
+</main>
+
+<script>
+const RAW = [["der Apfel","apple","🍎",0],["die Birne","pear","🍐",0],["die Banane","banana","🍌",0],["die Orange","orange","🍊",0],["die Zitrone","lemon","🍋",0],["die Erdbeere","strawberry","🍓",0],["die Traube","grape","🍇",0],["die Kirsche","cherry","🍒",0],["die Marille","apricot (Austrian)","",0],["der Pfirsich","peach","🍑",0],["die Ananas","pineapple","🍍",0],["der Erdapfel","potato (Austrian)","🥔",0],["die Kartoffel","potato","🥔",0],["die Karotte","carrot","🥕",0],["die Zwiebel","onion","🧅",0],["der Knoblauch","garlic","🧄",0],["der Paradeiser","tomato (Austrian)","🍅",0],["die Tomate","tomato","🍅",0],["die Gurke","cucumber","🥒",0],["die Paprika","pepper","🫑",0],["die Melanzani","aubergine (Austrian)","🍆",0],["der Karfiol","cauliflower (Austrian)","",0],["der Brokkoli","broccoli","🥦",0],["der Salat","salad, lettuce","🥗",0],["der Mais","corn","🌽",0],["die Fisolen","green beans (Austrian)","",0],["die Bohne","bean","",0],["die Erbse","pea","",0],["der Kürbis","pumpkin","🎃",0],["das Brot","bread","🍞",0],["die Semmel","bread roll (Austrian)","🥖",0],["das Kipferl","crescent roll (Austrian)","🥐",0],["der Kuchen","cake","🍰",0],["die Torte","layer cake","🎂",0],["der Keks","biscuit, cookie","🍪",0],["die Schokolade","chocolate","🍫",0],["das Eis","ice cream","🍦",0],["der Zucker","sugar","",0],["das Salz","salt","🧂",0],["der Pfeffer","pepper (spice)","",0],["das Mehl","flour","",0],["das Öl","oil","",0],["der Honig","honey","🍯",0],["die Marmelade","jam","",0],["die Butter","butter","🧈",0],["der Käse","cheese","🧀",0],["die Milch","milk","🥛",0],["der Obers","cream (Austrian)","",0],["das Schlagobers","whipped cream (Austrian)","",0],["der Topfen","quark (Austrian)","",0],["das Joghurt","yoghurt","",0],["das Ei","egg","🥚",0],["das Fleisch","meat","🥩",0],["das Hendl","chicken (Austrian)","🍗",0],["das Huhn","chicken","🐔",0],["das Rindfleisch","beef","",0],["das Faschierte","minced meat (Austrian)","",0],["die Wurst","sausage","🌭",0],["der Schinken","ham","",0],["der Speck","bacon","🥓",0],["der Fisch","fish","🐟",0],["die Nudeln","noodles, pasta","🍝",0],["der Reis","rice","🍚",0],["die Suppe","soup","🍲",0],["die Pizza","pizza","🍕",0],["die Pommes","chips, fries","🍟",0],["das Schnitzel","schnitzel","",0],["der Knödel","dumpling","",0],["der Palatschinken","pancake (Austrian)","🥞",0],["der Strudel","strudel","",0],["der Krapfen","doughnut (Austrian)","🍩",0],["die Nuss","nut","🥜",0],["das Wasser","water","💧",0],["der Kaffee","coffee","☕",0],["der Tee","tea","🍵",0],["der Saft","juice","🧃",0],["die Limonade","lemonade","",0],["das Bier","beer","🍺",0],["der Wein","wine","🍷",0],["das Frühstück","breakfast","🍳",0],["das Mittagessen","lunch","",0],["das Abendessen","dinner","",0],["die Jause","snack (Austrian)","",0],["die Speisekarte","menu","",0],["die Rechnung","bill","🧾",0],["das Trinkgeld","tip","",0],["die Gabel","fork","🍴",0],["der Löffel","spoon","🥄",0],["das Messer","knife","🔪",0],["der Teller","plate","",0],["das Glas","glass","",0],["die Tasse","cup","",0],["die Flasche","bottle","🍼",0],["die Schüssel","bowl","🥣",0],["der Topf","pot","",0],["die Pfanne","pan","",0],["essen","to eat","",0],["trinken","to drink","",0],["kochen","to cook","",0],["backen","to bake","",0],["schmecken","to taste","",0],["bestellen","to order","",0],["bezahlen","to pay","",0],["lecker","tasty","",0],["süß","sweet","",0],["sauer","sour","",0],["salzig","salty","",0],["scharf","spicy, sharp","",0],["heiß","hot","",0],["kalt","cold","",0],["hungrig","hungry","",0],["durstig","thirsty","",0],["satt","full (not hungry)","",0],["frisch","fresh","",0],["der Körper","body","",1],["der Kopf","head","",1],["das Gesicht","face","",1],["das Haar","hair","",1],["das Auge","eye","👁️",1],["das Ohr","ear","👂",1],["die Nase","nose","👃",1],["der Mund","mouth","👄",1],["der Zahn","tooth","🦷",1],["der Hals","neck, throat","",1],["die Schulter","shoulder","",1],["der Arm","arm","💪",1],["die Hand","hand","✋",1],["der Finger","finger","",1],["der Bauch","stomach, belly","",1],["der Rücken","back","",1],["das Bein","leg","🦵",1],["der Fuß","foot","🦶",1],["das Knie","knee","",1],["das Herz","heart","❤️",1],["das Blut","blood","🩸",1],["die Haut","skin","",1],["der Arzt","doctor (male)","👨‍⚕️",1],["die Ärztin","doctor (female)","👩‍⚕️",1],["das Spital","hospital (Austrian)","🏥",1],["das Krankenhaus","hospital","🏥",1],["die Apotheke","pharmacy","",1],["das Medikament","medicine","💊",1],["die Tablette","tablet, pill","",1],["das Rezept","prescription, recipe","",1],["das Pflaster","plaster","🩹",1],["der Termin","appointment","",1],["die Krankheit","illness","",1],["die Grippe","flu","",1],["die Erkältung","cold (illness)","",1],["das Fieber","fever","",1],["der Husten","cough","",1],["die Kopfschmerzen","headache","",1],["der Schmerz","pain","",1],["der Unfall","accident","",1],["die Krankenkasse","health insurance","",1],["die e-card","health insurance card","",1],["die Versicherung","insurance","",1],["der Zahnarzt","dentist","",1],["krank","ill","🤒",1],["gesund","healthy","",1],["müde","tired","😴",1],["stark","strong","",1],["schlafen","to sleep","",1],["husten","to cough","",1],["wehtun","to hurt","",1],["die Kleidung","clothing","",2],["das T-Shirt","T-shirt","👕",2],["das Hemd","shirt","",2],["die Bluse","blouse","",2],["der Pullover","jumper","",2],["die Jacke","jacket","",2],["der Mantel","coat","🧥",2],["die Hose","trousers","👖",2],["die Jeans","jeans","",2],["der Rock","skirt","",2],["das Kleid","dress","👗",2],["der Schuh","shoe","👟",2],["der Stiefel","boot","🥾",2],["die Socke","sock","🧦",2],["der Schal","scarf","🧣",2],["die Mütze","cap, hat","",2],["der Hut","hat","👒",2],["die Tasche","bag","👜",2],["der Rucksack","backpack","🎒",2],["die Brille","glasses","👓",2],["die Sonnenbrille","sunglasses","🕶️",2],["die Uhr","clock, watch","⌚",2],["der Regenschirm","umbrella","☂️",2],["anziehen","to put on","",2],["ausziehen","to take off","",2],["tragen","to wear, to carry","",2],["passen","to fit","",2],["das Haus","house","🏠",3],["die Wohnung","flat, apartment","",3],["das Zimmer","room","",3],["die Küche","kitchen","",3],["das Badezimmer","bathroom","🛁",3],["die Toilette","toilet","🚽",3],["das Schlafzimmer","bedroom","",3],["das Wohnzimmer","living room","",3],["der Keller","cellar","",3],["der Balkon","balcony","",3],["der Garten","garden","",3],["das Dach","roof","",3],["die Wand","wall","",3],["der Boden","floor","",3],["die Decke","ceiling, blanket","",3],["die Tür","door","🚪",3],["das Fenster","window","",3],["die Stiege","stairs (Austrian)","",3],["die Treppe","stairs","",3],["der Aufzug","lift","",3],["der Schlüssel","key","🔑",3],["die Miete","rent","",3],["der Vermieter","landlord","",3],["der Nachbar","neighbour","",3],["die Adresse","address","",3],["der Stock","floor, storey","",3],["das Erdgeschoss","ground floor","",3],["der Tisch","table","",3],["der Sessel","chair (Austrian)","🪑",3],["der Stuhl","chair","🪑",3],["das Bett","bed","🛏️",3],["das Sofa","sofa","🛋️",3],["der Kasten","wardrobe, cupboard (Austrian)","",3],["der Schrank","cupboard","",3],["das Regal","shelf","",3],["die Lampe","lamp","💡",3],["der Spiegel","mirror","🪞",3],["die Waschmaschine","washing machine","",3],["der Kühlschrank","fridge","",3],["der Herd","cooker","",3],["der Ofen","oven","",3],["der Fernseher","television","📺",3],["das Radio","radio","📻",3],["der Computer","computer","💻",3],["das Telefon","telephone","☎️",3],["das Handy","mobile phone","📱",3],["das Handtuch","towel","",3],["die Zahnbürste","toothbrush","🪥",3],["die Zahnpasta","toothpaste","",3],["der Müll","rubbish","🗑️",3],["das Sackerl","bag (Austrian)","🛍️",3],["putzen","to clean","",3],["aufräumen","to tidy up","",3],["wohnen","to live (reside)","",3],["einziehen","to move in","",3],["sauber","clean","",3],["schmutzig","dirty","",3],["groß","big","",3],["klein","small","",3],["neu","new","",3],["alt","old","",3],["der Hund","dog","🐕",4],["die Katze","cat","🐈",4],["der Vogel","bird","🐦",4],["das Pferd","horse","🐎",4],["die Kuh","cow","🐄",4],["das Schwein","pig","🐖",4],["das Schaf","sheep","🐑",4],["die Ziege","goat","🐐",4],["der Hase","hare, rabbit","🐇",4],["die Maus","mouse","🐁",4],["die Ente","duck","🦆",4],["der Bär","bear","🐻",4],["die Schlange","snake","🐍",4],["die Biene","bee","🐝",4],["der Schmetterling","butterfly","🦋",4],["das Tier","animal","",4],["die Blume","flower","🌸",4],["der Baum","tree","🌳",4],["das Blatt","leaf","🍃",4],["das Gras","grass","",4],["die Rose","rose","🌹",4],["der Wald","forest","🌲",4],["der Berg","mountain","⛰️",4],["der See","lake","",4],["der Fluss","river","",4],["das Meer","sea","🌊",4],["der Strand","beach","🏖️",4],["die Wiese","meadow","",4],["die Erde","earth","🌍",4],["die Sonne","sun","☀️",4],["der Mond","moon","🌙",4],["der Stern","star","⭐",4],["der Himmel","sky","",4],["die Wolke","cloud","☁️",4],["der Regen","rain","🌧️",4],["der Schnee","snow","❄️",4],["der Wind","wind","",4],["das Gewitter","thunderstorm","⛈️",4],["das Wetter","weather","",4],["der Frühling","spring","",4],["der Sommer","summer","",4],["der Herbst","autumn","🍂",4],["der Winter","winter","",4],["regnen","to rain","",4],["schneien","to snow","",4],["scheinen","to shine","",4],["warm","warm","",4],["kühl","cool","",4],["nass","wet","",4],["trocken","dry","",4],["sonnig","sunny","",4],["windig","windy","",4],["die Stadt","city","🏙️",5],["das Dorf","village","🏘️",5],["die Straße","street","🛣️",5],["die Gasse","lane, alley (Austrian)","",5],["der Platz","square, place","",5],["die Brücke","bridge","🌉",5],["der Park","park","🏞️",5],["der Spielplatz","playground","",5],["das Gebäude","building","🏢",5],["die Kirche","church","⛪",5],["die Moschee","mosque","🕌",5],["das Museum","museum","🏛️",5],["das Kino","cinema","🎬",5],["das Theater","theatre","🎭",5],["die Bibliothek","library","📚",5],["die Schule","school","🏫",5],["die Universität","university","🎓",5],["der Kindergarten","kindergarten","",5],["die Bank","bank","🏦",5],["die Post","post office","📮",5],["die Polizei","police","👮",5],["die Feuerwehr","fire brigade","🚒",5],["das Rathaus","town hall","",5],["das Amt","office, authority","",5],["die Gemeinde","municipality","",5],["der Bezirk","district","",5],["das Geschäft","shop","🏪",5],["der Supermarkt","supermarket","🛒",5],["die Bäckerei","bakery","🥖",5],["die Metzgerei","butcher's","",5],["die Trafik","tobacconist (Austrian)","",5],["der Markt","market","",5],["das Restaurant","restaurant","🍽️",5],["das Kaffeehaus","coffee house","☕",5],["das Hotel","hotel","🏨",5],["die Baustelle","building site","🚧",5],["die Ampel","traffic light","🚦",5],["der Gehsteig","pavement (Austrian)","",5],["der Weg","way, path","",5],["links","left","",5],["rechts","right","",5],["geradeaus","straight ahead","",5],["hier","here","",5],["dort","there","",5],["oben","up, above","",5],["unten","down, below","",5],["vorne","in front","",5],["hinten","behind, at the back","",5],["weit","far","",5],["nah","near","",5],["das Auto","car","🚗",6],["das Taxi","taxi","🚕",6],["der Bus","bus","🚌",6],["die Straßenbahn","tram","🚋",6],["die U-Bahn","underground","🚇",6],["der Zug","train","🚆",6],["das Fahrrad","bicycle","🚲",6],["das Motorrad","motorbike","🏍️",6],["das Flugzeug","aeroplane","✈️",6],["das Schiff","ship","🚢",6],["der Bahnhof","railway station","",6],["der Flughafen","airport","",6],["die Haltestelle","stop","🚏",6],["der Bahnsteig","platform","",6],["das Gleis","track, platform","",6],["die Fahrkarte","ticket","🎫",6],["die Jahreskarte","annual pass","",6],["die Monatskarte","monthly pass","",6],["der Fahrplan","timetable","",6],["die Verspätung","delay","",6],["die Abfahrt","departure","",6],["die Ankunft","arrival","",6],["der Fahrer","driver","",6],["der Führerschein","driving licence","",6],["die Tankstelle","petrol station","⛽",6],["der Parkplatz","car park","🅿️",6],["die Autobahn","motorway","",6],["der Stau","traffic jam","",6],["der Verkehr","traffic","",6],["die Reise","journey","",6],["der Urlaub","holiday","",6],["der Koffer","suitcase","🧳",6],["der Reisepass","passport","🛂",6],["das Gepäck","luggage","",6],["die Karte","map, card","🗺️",6],["der Ausflug","trip, excursion","",6],["das Ziel","destination, goal","",6],["fahren","to drive, to go (by vehicle)","",6],["fliegen","to fly","",6],["reisen","to travel","",6],["einsteigen","to get on","",6],["aussteigen","to get off","",6],["umsteigen","to change (trains)","",6],["abfahren","to depart","",6],["ankommen","to arrive","",6],["parken","to park","",6],["gehen","to go, to walk","",6],["laufen","to run, to walk","",6],["die Arbeit","work","",7],["der Beruf","profession","",7],["die Firma","company","",7],["das Büro","office","",7],["der Chef","boss","",7],["der Kollege","colleague","",7],["der Arbeitgeber","employer","",7],["der Arbeitnehmer","employee","",7],["der Lohn","wage","",7],["das Gehalt","salary","",7],["der Vertrag","contract","",7],["die Bewerbung","application","",7],["der Lebenslauf","CV","",7],["das Vorstellungsgespräch","job interview","",7],["die Stelle","job, position","",7],["die Arbeitszeit","working hours","",7],["die Pause","break","",7],["der Feierabend","end of work day","",7],["der Urlaubstag","day of leave","",7],["die Kündigung","dismissal, notice","",7],["das AMS","Public Employment Service (Austria)","",7],["die Ausbildung","training","",7],["die Lehre","apprenticeship","",7],["der Lehrer","teacher (male)","👨‍🏫",7],["die Lehrerin","teacher (female)","👩‍🏫",7],["der Koch","cook (male)","👨‍🍳",7],["die Köchin","cook (female)","👩‍🍳",7],["der Bäcker","baker","",7],["der Verkäufer","salesperson (male)","",7],["die Verkäuferin","salesperson (female)","",7],["der Kellner","waiter","",7],["der Mechaniker","mechanic","🧑‍🔧",7],["der Friseur","hairdresser","",7],["der Bauarbeiter","construction worker","👷",7],["die Krankenschwester","nurse (female)","",7],["der Polizist","police officer","👮",7],["der Feuerwehrmann","firefighter","🧑‍🚒",7],["der Landwirt","farmer","🧑‍🌾",7],["der Programmierer","programmer","🧑‍💻",7],["der Student","student (male)","",7],["die Studentin","student (female)","",7],["arbeiten","to work","",7],["verdienen","to earn","",7],["bewerben","to apply","",7],["kündigen","to quit, to give notice","",7],["anrufen","to call","",7],["beginnen","to begin","",7],["die Klasse","class","",8],["der Unterricht","lesson, teaching","",8],["der Kurs","course","",8],["der Deutschkurs","German course","",8],["die Prüfung","exam","",8],["der Test","test","",8],["die Note","grade","",8],["die Aufgabe","task, exercise","",8],["die Hausaufgabe","homework","",8],["die Frage","question","",8],["die Antwort","answer","",8],["das Beispiel","example","",8],["das Wort","word","",8],["der Satz","sentence","",8],["der Buchstabe","letter (of the alphabet)","",8],["die Zahl","number","",8],["die Sprache","language","",8],["die Grammatik","grammar","",8],["das Wörterbuch","dictionary","",8],["das Buch","book","📖",8],["das Heft","exercise book","📓",8],["der Stift","pen, pencil","🖊️",8],["der Bleistift","pencil","✏️",8],["die Schere","scissors","✂️",8],["das Papier","paper","📄",8],["die Matura","school-leaving exam (Austrian)","",8],["das Zeugnis","certificate, report card","",8],["die Volksschule","primary school (Austrian)","",8],["die Mittelschule","secondary school (Austrian)","",8],["das Gymnasium","grammar school","",8],["der Schüler","pupil","",8],["lernen","to learn","",8],["üben","to practise","",8],["lesen","to read","",8],["schreiben","to write","",8],["sprechen","to speak","",8],["hören","to hear, to listen","",8],["verstehen","to understand","",8],["wiederholen","to repeat","",8],["buchstabieren","to spell","",8],["erklären","to explain","",8],["fragen","to ask","",8],["antworten","to answer","",8],["rechnen","to calculate","",8],["zeichnen","to draw","",8],["richtig","correct","",8],["falsch","wrong","",8],["leicht","easy, light","",8],["schwer","difficult, heavy","",8],["wichtig","important","",8],["die Familie","family","👪",9],["die Eltern","parents","",9],["der Vater","father","",9],["die Mutter","mother","",9],["der Sohn","son","",9],["die Tochter","daughter","",9],["das Kind","child","🧒",9],["das Baby","baby","👶",9],["der Bruder","brother","",9],["die Schwester","sister","",9],["die Geschwister","siblings","",9],["der Großvater","grandfather","",9],["die Großmutter","grandmother","",9],["der Opa","grandpa","",9],["die Oma","grandma","",9],["der Onkel","uncle","",9],["die Tante","aunt","",9],["der Ehemann","husband","",9],["die Ehefrau","wife","",9],["der Mann","man, husband","👨",9],["die Frau","woman, wife","👩",9],["der Junge","boy","👦",9],["das Mädchen","girl","👧",9],["der Freund","friend, boyfriend","",9],["die Freundin","friend, girlfriend","",9],["der Erwachsene","adult","🧑",9],["der Mensch","person","",9],["die Leute","people","",9],["der Herr","Mr, gentleman","",9],["der Gast","guest","",9],["der Name","name","",9],["der Vorname","first name","",9],["der Nachname","surname","",9],["das Alter","age","",9],["das Geschlecht","gender","",9],["der Geburtstag","birthday","🎂",9],["die Hochzeit","wedding","💒",9],["verheiratet","married","",9],["ledig","single (unmarried)","",9],["geschieden","divorced","",9],["verwitwet","widowed","",9],["schwanger","pregnant","🤰",9],["heiraten","to marry","",9],["lieben","to love","",9],["kennen","to know (a person)","",9],["besuchen","to visit","",9],["einladen","to invite","",9],["helfen","to help","",9],["treffen","to meet","",9],["die Freizeit","free time","",10],["das Hobby","hobby","",10],["der Sport","sport","",10],["der Fußball","football","⚽",10],["der Ball","ball","",10],["das Tennis","tennis","🎾",10],["das Schwimmen","swimming","🏊",10],["das Skifahren","skiing","⛷️",10],["das Radfahren","cycling","🚴",10],["das Wandern","hiking","🥾",10],["das Fitnessstudio","gym","🏋️",10],["das Spiel","game","🎲",10],["das Schach","chess","♟️",10],["die Musik","music","🎵",10],["das Lied","song","",10],["das Konzert","concert","",10],["die Gitarre","guitar","🎸",10],["das Klavier","piano","🎹",10],["das Foto","photo","📷",10],["die Kamera","camera","",10],["der Film","film","🎞️",10],["die Zeitung","newspaper","📰",10],["die Zeitschrift","magazine","",10],["der Brief","letter (mail)","✉️",10],["die E-Mail","email","📧",10],["das Internet","internet","",10],["das Fest","party, festival","🎉",10],["die Party","party","",10],["das Geschenk","gift","🎁",10],["spielen","to play","",10],["singen","to sing","",10],["tanzen","to dance","💃",10],["schwimmen","to swim","",10],["wandern","to hike","",10],["fotografieren","to photograph","",10],["malen","to paint","",10],["feiern","to celebrate","",10],["sich treffen","to meet up","",10],["gewinnen","to win","",10],["verlieren","to lose","",10],["spazieren gehen","to go for a walk","",10],["die Zeit","time","",11],["die Stunde","hour","",11],["die Minute","minute","",11],["der Tag","day","",11],["die Woche","week","",11],["der Monat","month","",11],["das Jahr","year","",11],["das Wochenende","weekend","",11],["der Morgen","morning","🌅",11],["der Mittag","noon","",11],["der Nachmittag","afternoon","",11],["der Abend","evening","🌆",11],["die Nacht","night","🌃",11],["heute","today","",11],["gestern","yesterday","",11],["morgen","tomorrow","",11],["jetzt","now","",11],["bald","soon","",11],["früh","early","",11],["spät","late","",11],["immer","always","",11],["oft","often","",11],["manchmal","sometimes","",11],["selten","rarely","",11],["nie","never","",11],["heuer","this year (Austrian)","",11],["der Montag","Monday","",11],["der Dienstag","Tuesday","",11],["der Mittwoch","Wednesday","",11],["der Donnerstag","Thursday","",11],["der Freitag","Friday","",11],["der Samstag","Saturday","",11],["der Sonntag","Sunday","",11],["der Jänner","January (Austrian)","",11],["der Februar","February","",11],["der März","March","",11],["der April","April","",11],["der Mai","May","",11],["der Juni","June","",11],["der Juli","July","",11],["der August","August","",11],["der September","September","",11],["der Oktober","October","",11],["der November","November","",11],["der Dezember","December","",11],["der Kalender","calendar","📅",11],["der Feiertag","public holiday","",11],["Weihnachten","Christmas","🎄",11],["Ostern","Easter","🐣",11],["Silvester","New Year's Eve","🎆",11],["null","zero","",12],["eins","one","",12],["zwei","two","",12],["drei","three","",12],["vier","four","",12],["fünf","five","",12],["sechs","six","",12],["sieben","seven","",12],["acht","eight","",12],["neun","nine","",12],["zehn","ten","",12],["elf","eleven","",12],["zwölf","twelve","",12],["dreizehn","thirteen","",12],["vierzehn","fourteen","",12],["fünfzehn","fifteen","",12],["sechzehn","sixteen","",12],["siebzehn","seventeen","",12],["achtzehn","eighteen","",12],["neunzehn","nineteen","",12],["zwanzig","twenty","",12],["dreißig","thirty","",12],["vierzig","forty","",12],["fünfzig","fifty","",12],["sechzig","sixty","",12],["siebzig","seventy","",12],["achtzig","eighty","",12],["neunzig","ninety","",12],["hundert","one hundred","",12],["tausend","one thousand","",12],["die Hälfte","half","",12],["die Farbe","colour","🎨",13],["rot","red","🔴",13],["blau","blue","🔵",13],["gelb","yellow","🟡",13],["grün","green","🟢",13],["lila","purple","🟣",13],["braun","brown","🟤",13],["schwarz","black","⚫",13],["weiß","white","⚪",13],["grau","grey","",13],["rosa","pink","",13],["der Kreis","circle","",13],["das Quadrat","square","🟦",13],["das Dreieck","triangle","🔺",13],["das Rechteck","rectangle","",13],["der Punkt","dot, point","",13],["die Linie","line","",13],["das Geld","money","💰",14],["der Euro","euro","💶",14],["die Münze","coin","🪙",14],["die Kreditkarte","credit card","💳",14],["das Bargeld","cash","",14],["das Konto","account","",14],["der Bankomat","cash machine (Austrian)","🏧",14],["der Preis","price","",14],["das Angebot","offer","",14],["die Kasse","till","",14],["der Einkaufswagen","shopping trolley","",14],["die Quittung","receipt","",14],["der Kunde","customer","",14],["der Rabatt","discount","",14],["das Paket","parcel","📦",14],["der Einkauf","purchase","",14],["die Steuer","tax","",14],["kaufen","to buy","",14],["verkaufen","to sell","",14],["kosten","to cost","",14],["zahlen","to pay","",14],["sparen","to save","",14],["ausgeben","to spend","",14],["wechseln","to change (money)","",14],["umtauschen","to exchange","",14],["bar","in cash","",14],["billig","cheap","",14],["teuer","expensive","",14],["gratis","free of charge","",14],["kostenlos","free of charge","",14],["geöffnet","open","",14],["geschlossen","closed","",14],["Österreich","Austria","🇦🇹",15],["Wien","Vienna","",15],["die Hauptstadt","capital city","",15],["das Bundesland","federal state","",15],["der Bundeskanzler","chancellor","",15],["der Bundespräsident","federal president","",15],["das Parlament","parliament","",15],["die Verfassung","constitution","",15],["die Demokratie","democracy","",15],["die Wahl","election","🗳️",15],["die Staatsbürgerschaft","citizenship","",15],["die Heimat","home country","",15],["das Ausland","abroad","",15],["der Ausländer","foreigner","",15],["die Integration","integration","",15],["der ÖIF","Austrian Integration Fund","",15],["die Integrationsprüfung","integration exam","",15],["der Integrationskurs","integration course","",15],["der Wertekurs","values course","",15],["das Zertifikat","certificate","",15],["die Aufenthaltsbewilligung","residence permit","",15],["der Aufenthaltstitel","residence title","",15],["der Antrag","application, form","",15],["das Formular","form","",15],["das Dokument","document","",15],["die Unterschrift","signature","",15],["der Ausweis","ID card","🪪",15],["der Meldezettel","registration form (Austrian)","",15],["die Meldung","registration","",15],["der Wohnsitz","place of residence","",15],["der Pass","passport","",15],["die Beratung","advice","",15],["der Flüchtling","refugee","",15],["die Gebühr","fee","",15],["die Behörde","authority","",15],["das Gesetz","law","",15],["das Recht","right, law","",15],["die Pflicht","duty","",15],["die Freiheit","freedom","",15],["die Gleichberechtigung","equality","",15],["die Religion","religion","",15],["die Meinung","opinion","",15],["die Gesellschaft","society","",15],["die Kultur","culture","",15],["die Tradition","tradition","",15],["die Sprachkenntnisse","language skills","",15],["die Donau","Danube","",15],["der Stephansdom","St Stephen's Cathedral","",15],["die Alpen","Alps","🏔️",15],["Salzburg","Salzburg","",15],["das Burgenland","Burgenland","",15],["die Steiermark","Styria","",15],["Kärnten","Carinthia","",15],["Tirol","Tyrol","",15],["Niederösterreich","Lower Austria","",15],["Oberösterreich","Upper Austria","",15],["Deutschland","Germany","🇩🇪",15],["die Schweiz","Switzerland","🇨🇭",15],["die Europäische Union","European Union","🇪🇺",15],["der Nationalfeiertag","national holiday (26 October)","",15],["Hallo","hello","👋",16],["Grüß Gott","hello (Austrian)","",16],["Servus","hi / bye (Austrian)","",16],["Guten Morgen","good morning","",16],["Guten Tag","good day","",16],["Guten Abend","good evening","",16],["Gute Nacht","good night","",16],["Auf Wiedersehen","goodbye","",16],["Tschüss","bye","",16],["Bis bald","see you soon","",16],["Bitte","please, you're welcome","",16],["Danke","thank you","",16],["Entschuldigung","excuse me, sorry","",16],["Es tut mir leid","I'm sorry","",16],["Wie geht es Ihnen?","How are you? (formal)","",16],["Wie heißen Sie?","What is your name?","",16],["Woher kommen Sie?","Where are you from?","",16],["Wo wohnen Sie?","Where do you live?","",16],["Wie alt sind Sie?","How old are you?","",16],["Ich verstehe nicht","I do not understand","",16],["Sprechen Sie langsam","speak slowly","",16],["Wie bitte?","Pardon?","",16],["Was bedeutet das?","What does that mean?","",16],["Wie viel kostet das?","How much does that cost?","",16],["Wo ist die Toilette?","Where is the toilet?","",16],["Ich möchte","I would like","",16],["Ich brauche Hilfe","I need help","",16],["Mahlzeit","bon appétit (Austrian)","",16],["Gute Besserung","get well soon","",16],["Herzlichen Glückwunsch","congratulations","",16],["Ja","yes","",16],["Nein","no","",16],["vielleicht","maybe","",16],["natürlich","of course","",16],["genau","exactly","",16],["leider","unfortunately","",16],["gern","gladly","",16],["sehr","very","",16],["auch","also","",16],["nur","only","",16],["schon","already","",16],["noch","still","",16],["nicht","not","",16],["kein","no, not any","",16],["wer","who","",17],["was","what","",17],["wo","where","",17],["woher","where from","",17],["wohin","where to","",17],["wann","when","",17],["warum","why","",17],["wie","how","",17],["wie viel","how much","",17],["wie viele","how many","",17],["welcher","which","",17],["und","and","",17],["oder","or","",17],["aber","but","",17],["weil","because","",17],["dass","that","",17],["wenn","if, when","",17],["denn","because, for","",17],["mit","with","",17],["ohne","without","",17],["für","for","",17],["von","from, of","",17],["zu","to","",17],["nach","after, to","",17],["bei","at, near","",17],["aus","out of","",17],["in","in","",17],["an","at, on","",17],["auf","on","",17],["über","over, about","",17],["unter","under","",17],["vor","before, in front of","",17],["hinter","behind","",17],["neben","next to","",17],["zwischen","between","",17],["ich","I","",17],["du","you (informal)","",17],["er","he","",17],["sie","she, they","",17],["es","it","",17],["wir","we","",17],["ihr","you (plural)","",17],["Sie","you (formal)","",17],["mein","my","",17],["dein","your","",17],["unser","our","",17],["dieser","this","",17],["alle","all","",17],["viele","many","",17],["wenige","few","",17],["etwas","something","",17],["nichts","nothing","",17],["sein","to be","",18],["haben","to have","",18],["werden","to become","",18],["können","can, to be able to","",18],["müssen","must, to have to","",18],["wollen","to want","",18],["sollen","should","",18],["dürfen","may, to be allowed to","",18],["mögen","to like","",18],["möchten","would like","",18],["machen","to do, to make","",18],["geben","to give","",18],["nehmen","to take","",18],["kommen","to come","",18],["bleiben","to stay","",18],["sehen","to see","",18],["sagen","to say","",18],["heißen","to be called","",18],["finden","to find","",18],["wissen","to know (a fact)","",18],["denken","to think","",18],["glauben","to believe","",18],["brauchen","to need","",18],["suchen","to look for","",18],["bringen","to bring","",18],["holen","to fetch","",18],["legen","to lay, to put","",18],["stellen","to place, to put upright","",18],["setzen","to set, to seat","",18],["sitzen","to sit","",18],["stehen","to stand","",18],["liegen","to lie","",18],["hängen","to hang","",18],["öffnen","to open","",18],["schließen","to close","",18],["warten","to wait","",18],["bekommen","to receive","",18],["mitbringen","to bring along","",18],["anfangen","to start","",18],["aufhören","to stop","",18],["aufstehen","to get up","",18],["einkaufen","to shop","",18],["mitkommen","to come along","",18],["zurückkommen","to come back","",18],["zeigen","to show","",18],["gefallen","to please, to like","",18],["gehören","to belong","",18],["leben","to live","",18],["sterben","to die","",18],["geboren werden","to be born","",18],["rufen","to call out","",18],["laden","to load, to charge","",18],["telefonieren","to phone","",18],["schicken","to send","",18],["senden","to send","",18],["lächeln","to smile","",18],["lachen","to laugh","",18],["weinen","to cry","",18],["vergessen","to forget","",18],["erinnern","to remember","",18],["erlauben","to allow","",18],["verbieten","to forbid","",18],["anmelden","to register","",18],["abmelden","to deregister","",18],["ausfüllen","to fill in","",18],["unterschreiben","to sign","",18],["abgeben","to hand in","",18],["beantragen","to apply for","",18],["gut","good","",19],["schlecht","bad","",19],["schön","beautiful","",19],["hässlich","ugly","",19],["nett","nice","",19],["freundlich","friendly","",19],["höflich","polite","",19],["lustig","funny","",19],["traurig","sad","😢",19],["glücklich","happy","😊",19],["froh","glad","",19],["wütend","angry","😠",19],["nervös","nervous","",19],["ruhig","quiet, calm","",19],["laut","loud","",19],["leise","quiet","",19],["lang","long","",19],["kurz","short","",19],["hoch","high","",19],["niedrig","low","",19],["breit","wide","",19],["schmal","narrow","",19],["dick","thick, fat","",19],["dünn","thin","",19],["schnell","fast","",19],["langsam","slow","",19],["jung","young","",19],["reich","rich","",19],["arm","poor","",19],["frei","free","",19],["besetzt","occupied","",19],["voll","full","",19],["leer","empty","",19],["offen","open","",19],["hell","bright","",19],["dunkel","dark","",19],["weich","soft","",19],["hart","hard","",19],["gefährlich","dangerous","",19],["sicher","safe, sure","",19],["möglich","possible","",19],["nötig","necessary","",19],["bekannt","known","",19],["fremd","foreign, strange","",19],["gleich","same, equal","",19],["anders","different","",19],["einfach","simple","",19],["schwierig","difficult","",19],["interessant","interesting","",19],["langweilig","boring","",19],["bereit","ready","",19],["beschäftigt","busy","",19],["berufstätig","employed","",19],["arbeitslos","unemployed","",19],["deutsch","German","",19],["österreichisch","Austrian","",19]];
+const THEMES = [["Essen und Trinken", "Food and Drink"], ["Der Körper und die Gesundheit", "Body and Health"], ["Die Kleidung", "Clothing"], ["Das Zuhause", "Home"], ["Tiere und Natur", "Animals and Nature"], ["Die Stadt und Orte", "City and Places"], ["Verkehr und Reisen", "Transport and Travel"], ["Arbeit und Beruf", "Work and Professions"], ["Schule und Lernen", "School and Learning"], ["Familie und Menschen", "Family and People"], ["Freizeit und Sport", "Leisure and Sport"], ["Die Zeit", "Time"], ["Zahlen", "Numbers"], ["Farben und Formen", "Colours and Shapes"], ["Einkaufen und Geld", "Shopping and Money"], ["Behörden und Österreich", "Authorities, Austria and ÖIF"], ["Kommunikation und Alltag", "Communication and Everyday Phrases"], ["Fragewörter und kleine Wörter", "Question Words and Small Words"], ["Wichtige Verben", "Important Verbs"], ["Wichtige Adjektive", "Important Adjectives"]];
+
+/*LOGIC*/
+const ART_RE = /^(der|die|das) (.+)$/;
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function norm(s){
+  return String(s).toLowerCase().replace(/ß/g,'ss').replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue')
+    .replace(/[.,!?;:'"“”„…]/g,'').replace(/\s+/g,' ').trim();
+}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;}
+const WORDS = RAW.map(function(r,i){
+  const m = ART_RE.exec(r[0]);
+  const en = r[1].replace(' (Austrian)','');
+  return {n:i+1,de:r[0],en:r[1],enc:en,em:r[2],t:r[3],at:r[1].indexOf('(Austrian)')>-1,art:m?m[1]:null,noun:m?m[2]:null,nde:norm(r[0])};
+});
+const BY_EN = new Map(), BY_DE = new Map();
+WORDS.forEach(function(w){
+  if(!BY_EN.has(w.enc)) BY_EN.set(w.enc,[]); BY_EN.get(w.enc).push(w);
+  if(!BY_DE.has(w.nde)) BY_DE.set(w.nde,[]); BY_DE.get(w.nde).push(w);
+});
+const QTYPES = {
+  choose:{label:'Choose the word'},
+  meaning:{label:'Choose the meaning'},
+  write:{label:'Write the word'},
+  listen:{label:'Listen and write'},
+  article:{label:'Article'}
+};
+function eligible(type, pool){
+  if(type==='article') return pool.filter(function(w){return !!w.art;});
+  return pool;
+}
+function distractors(w, pool, n, key){
+  const cls = !!w.art; const seen = new Set([key(w)]); const seenEn = new Set([w.enc]); const out = [];
+  function take(list){
+    for(const x of list){
+      if(out.length>=n) break;
+      if(x===w || x.enc===w.enc) continue;
+      const k = key(x); if(seen.has(k) || seenEn.has(x.enc)) continue;
+      seen.add(k); seenEn.add(x.enc); out.push(x);
+    }
+  }
+  take(shuffle(pool.filter(function(x){return !!x.art===cls;})));
+  if(out.length<n) take(shuffle(WORDS.filter(function(x){return !!x.art===cls;})));
+  if(out.length<n) take(shuffle(WORDS));
+  return out;
+}
+function makeQuestion(type, w, pool){
+  const q = {type:type, w:w};
+  if(type==='choose'){
+    q.options = shuffle([w].concat(distractors(w,pool,3,function(x){return x.de;})));
+    q.correct = q.options.indexOf(w);
+  } else if(type==='meaning'){
+    const opts = [w].concat(distractors(w,pool,3,function(x){return x.enc;})).map(function(x){return x.enc;});
+    q.options = shuffle(opts); q.correct = q.options.indexOf(w.enc);
+  } else if(type==='article'){
+    q.options = ['der','die','das']; q.correct = q.options.indexOf(w.art);
+  } else if(type==='write'){
+    q.accepted = BY_EN.get(w.enc);
+  } else if(type==='listen'){
+    q.accepted = BY_DE.get(w.nde);
+  }
+  return q;
+}
+function buildQuiz(themeIdx, count, types){
+  const pool = WORDS.filter(function(w){return themeIdx<0 || w.t===themeIdx;});
+  const usable = types.filter(function(t){return eligible(t,pool).length>0;});
+  if(!usable.length) return [];
+  const bag = {};
+  usable.forEach(function(t){bag[t]=shuffle(eligible(t,pool));});
+  const cap = Math.min(count, pool.length);
+  const qs = []; let order = []; let guard = 0;
+  while(qs.length<cap && guard++<10000){
+    if(!order.length) order = shuffle(usable);
+    const t = order.pop();
+    if(!bag[t].length) bag[t] = shuffle(eligible(t,pool));
+    qs.push(makeQuestion(t,bag[t].pop(),pool));
+  }
+  return qs;
+}
+function checkWrite(input, accepted){
+  const x = norm(input);
+  if(!x) return {ok:false,note:'Type an answer first.'};
+  for(const a of accepted){ if(norm(a.de)===x) return {ok:true,note:''}; }
+  for(const a of accepted){
+    if(a.noun){
+      if(norm(a.noun)===x) return {ok:false,note:'Add the article (der, die or das).'};
+      const parts = x.split(' ');
+      if(parts.length>1 && ['der','die','das'].indexOf(parts[0])>-1 && parts.slice(1).join(' ')===norm(a.noun)) return {ok:false,note:'Right word, wrong article.'};
+    }
+  }
+  return {ok:false,note:''};
+}
+/*ENDLOGIC*/
+
+/* ---------- storage (optional) ---------- */
+let known = new Set();
+try{ const k = JSON.parse(localStorage.getItem('wortschatz-known')||'[]'); if(Array.isArray(k)) known = new Set(k); }catch(e){}
+function saveKnown(){ try{ localStorage.setItem('wortschatz-known', JSON.stringify(Array.from(known))); }catch(e){} }
+
+/* ---------- speech ---------- */
+const hasSpeech = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+let voice = null;
+function pickVoice(){
+  if(!hasSpeech) return null;
+  const vs = speechSynthesis.getVoices();
+  const prefs = ['de-AT','de-DE','de-CH'];
+  for(const p of prefs){ const v = vs.find(function(v){return v.lang.replace('_','-')===p;}); if(v) return v; }
+  return vs.find(function(v){return v.lang.toLowerCase().indexOf('de')===0;}) || null;
+}
+function updateVoice(){
+  voice = pickVoice();
+  const el = document.getElementById('voice');
+  if(!hasSpeech) el.textContent = 'This browser cannot play speech, so sound is not available here.';
+  else if(!voice) el.textContent = 'No German voice found on this device. Install a German voice in your system settings for correct pronunciation.';
+  else el.textContent = 'Voice: ' + voice.name + ' (' + voice.lang.replace('_','-') + ')' + (voice.lang.replace('_','-')==='de-AT' ? '' : '. No Austrian voice installed, so a standard German voice is used.');
+}
+function speak(text, slow){
+  if(!hasSpeech) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = voice ? voice.lang : 'de-AT';
+    if(voice) u.voice = voice;
+    u.rate = slow ? 0.55 : 0.85;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+if(hasSpeech){ updateVoice(); speechSynthesis.addEventListener('voiceschanged', updateVoice); } else { updateVoice(); }
+
+const ICON_SOUND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICON_SLOW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9v6"/><path d="M20 9v6"/></svg>';
+
+function deHtml(w){
+  if(w.art) return '<span class="'+w.art+'">'+w.art+'</span> '+esc(w.noun);
+  return esc(w.de);
+}
+
+/* ---------- tabs ---------- */
+const tabCards = document.getElementById('tab-cards'), tabExam = document.getElementById('tab-exam');
+const panelCards = document.getElementById('panel-cards'), panelExam = document.getElementById('panel-exam');
+function showTab(which){
+  const c = which==='cards';
+  tabCards.setAttribute('aria-selected', c); tabExam.setAttribute('aria-selected', !c);
+  panelCards.hidden = !c; panelExam.hidden = c;
+  if(hasSpeech) try{speechSynthesis.cancel();}catch(e){}
+}
+tabCards.addEventListener('click', function(){showTab('cards');});
+tabExam.addEventListener('click', function(){showTab('exam');});
+
+/* ---------- flashcards ---------- */
+const themeSel = document.getElementById('theme');
+function fillThemes(){
+  const keep = themeSel.value || '-1';
+  const picOnly = cs.side==='pic';
+  const base = WORDS.filter(function(w){return !picOnly || w.em;});
+  themeSel.innerHTML = '<option value="-1">All themes (' + base.length + ')</option>' + THEMES.map(function(t,i){
+    const n = base.filter(function(w){return w.t===i;}).length;
+    return '<option value="'+i+'"'+(n?'':' disabled')+'>'+esc(t[0])+' ('+n+')</option>';
+  }).join('');
+  themeSel.value = keep;
+  if(themeSel.value!==keep) themeSel.value = '-1';
+}
+document.getElementById('stats').textContent = WORDS.length + ' words · ' + THEMES.length + ' themes · ' + WORDS.filter(function(w){return w.em;}).length + ' with pictures · A1–A2 · ÖIF';
+
+const cs = {deck:[], i:0, flipped:false, side:'pic'};
+fillThemes();
+const optShuffle = document.getElementById('opt-shuffle'), optHide = document.getElementById('opt-hide'), optAuto = document.getElementById('opt-auto');
+const cardzone = document.getElementById('cardzone');
+
+function buildDeck(){
+  const ti = parseInt(themeSel.value,10);
+  let d = WORDS.filter(function(w){return (ti<0 || w.t===ti) && (cs.side!=='pic' || w.em);});
+  if(optHide.checked) d = d.filter(function(w){return !known.has(w.n);});
+  if(optShuffle.checked) d = shuffle(d);
+  cs.deck = d; cs.i = 0; cs.flipped = false;
+  renderCard();
+  maybeAuto();
+}
+function face(w, side, main){
+  const pic = w.em ? '<div class="pic" aria-hidden="true">'+w.em+'</div>' : '';
+  const tag = '<div class="tag"><span>'+esc(THEMES[w.t][0])+'</span><span>#'+w.n+'</span></div>';
+  if(side==='pic') return tag + '<div class="pic big" role="img" aria-label="Picture card">'+w.em+'</div>';
+  if(side==='de'){
+    return tag + pic + '<div class="word">'+deHtml(w)+(w.at?' <span class="at">AT</span>':'')+'</div>' + (main?'':'<div class="sub">'+esc(w.enc)+'</div>');
+  }
+  return tag + pic + '<div class="word en">'+esc(w.enc)+'</div>' + (main?'':'<div class="sub">'+deHtml(w)+(w.at?' <span class="at">AT</span>':'')+'</div>');
+}
+function renderCard(){
+  const d = cs.deck;
+  if(!d.length){
+    const hidden = optHide.checked;
+    cardzone.innerHTML = '<div class="empty"><h2>' + (hidden ? 'All words in this theme are marked as known' : (cs.side==='pic' ? 'No pictures in this theme' : 'No words here')) + '</h2><p class="sub">' + (hidden ? 'Switch off "Hide known words" or reset your progress to practise them again.' : (cs.side==='pic' ? 'Choose the Deutsch or English front side to practise words without pictures, or pick another theme.' : 'Pick another theme.')) + '</p>' + (known.size ? '<button class="btn" type="button" data-act="reset">Reset known words</button>' : '') + '</div>';
+    return;
+  }
+  if(cs.i>=d.length) cs.i = d.length-1;
+  const w = d[cs.i];
+  const other = cs.side==='en' ? 'de' : (cs.side==='pic' ? 'de' : 'en');
+  const total = d.length;
+  const kn = d.filter(function(x){return known.has(x.n);}).length;
+  cardzone.innerHTML =
+    '<div class="stage"><button type="button" class="card'+(cs.flipped?' flipped':'')+'" data-act="flip" aria-label="Flashcard. Press to flip." id="thecard">' +
+      '<div class="card-in"><div class="face front">'+face(w,cs.side,true)+'<div class="hint">Tap to flip</div></div>' +
+      '<div class="face back">'+face(w,other,false)+'<div class="hint">Tap to flip back</div></div></div></button></div>' +
+    '<div class="row3">' +
+      '<button class="btn" type="button" data-act="sound" aria-label="Hear the word">'+ICON_SOUND+'Hear</button>' +
+      '<button class="btn" type="button" data-act="slow" aria-label="Hear the word slowly">'+ICON_SLOW+'Slowly</button>' +
+      '<button class="btn" type="button" data-act="flip">Flip</button></div>' +
+    '<div class="nav">' +
+      '<button class="btn warn" type="button" data-act="again">Practise again</button>' +
+      '<button class="btn good" type="button" data-act="known">'+(known.has(w.n)?'Known (marked)':'I know it')+'</button>' +
+      '<button class="btn" type="button" data-act="prev">Previous</button>' +
+      '<button class="btn primary" type="button" data-act="next">Next</button></div>' +
+    '<div class="meter"><div class="meter-top"><span>Card '+(cs.i+1)+' of '+total+'</span><span>Known in this set: '+kn+' · Total known: '+known.size+'</span></div>' +
+    '<div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+(cs.i+1)+'"><div class="fill" style="width:'+Math.round((cs.i+1)/total*100)+'%"></div></div></div>' +
+    (known.size ? '<button class="link" type="button" data-act="reset">Reset known words</button>' : '');
+}
+function currentWord(){return cs.deck[cs.i];}
+function maybeAuto(){
+  if(optAuto.checked && cs.side==='de' && !cs.flipped && currentWord()) speak(currentWord().de,false);
+}
+function go(delta){
+  if(!cs.deck.length) return;
+  cs.i = (cs.i + delta + cs.deck.length) % cs.deck.length; cs.flipped = false;
+  renderCard(); maybeAuto();
+}
+cardzone.addEventListener('click', function(e){
+  const b = e.target.closest('[data-act]'); if(!b) return;
+  const act = b.getAttribute('data-act'); const w = currentWord();
+  if(act==='flip'){ cs.flipped = !cs.flipped; const c = document.getElementById('thecard'); if(c) c.classList.toggle('flipped', cs.flipped); if(cs.flipped && cs.side!=='de' && optAuto.checked && w) speak(w.de,false); }
+  else if(act==='sound' && w) speak(w.de,false);
+  else if(act==='slow' && w) speak(w.de,true);
+  else if(act==='next') go(1);
+  else if(act==='prev') go(-1);
+  else if(act==='known' && w){
+    known.add(w.n); saveKnown();
+    if(optHide.checked){ cs.deck.splice(cs.i,1); cs.flipped=false; if(cs.i>=cs.deck.length) cs.i=0; renderCard(); maybeAuto(); }
+    else go(1);
+  }
+  else if(act==='again' && w){
+    known.delete(w.n); saveKnown();
+    if(cs.deck.length>1){ cs.deck.splice(cs.i,1); cs.deck.push(w); if(cs.i>=cs.deck.length) cs.i=0; cs.flipped=false; renderCard(); maybeAuto(); }
+    else { renderCard(); }
+  }
+  else if(act==='reset'){ known = new Set(); saveKnown(); buildDeck(); }
+});
+themeSel.addEventListener('change', buildDeck);
+optShuffle.addEventListener('change', buildDeck);
+optHide.addEventListener('change', buildDeck);
+['pic','de','en'].forEach(function(k){
+  document.getElementById('side-'+k).addEventListener('click', function(){setSide(k);});
+});
+function setSide(s){
+  cs.side = s;
+  ['pic','de','en'].forEach(function(k){document.getElementById('side-'+k).setAttribute('aria-pressed', k===s);});
+  fillThemes(); buildDeck();
+}
+
+/* ---------- exam ---------- */
+const ex = {phase:'setup', qs:[], i:0, score:0, checked:false, sel:null, res:[], cfg:null};
+const examzone = document.getElementById('examzone');
+const SETUP = {theme:'-1', count:'20', types:{choose:true,meaning:true,write:true,listen:false,article:true}};
+
+function renderSetup(note){
+  const themeOpts = '<option value="-1">All themes</option>' + THEMES.map(function(t,i){return '<option value="'+i+'"'+(SETUP.theme===String(i)?' selected':'')+'>'+esc(t[0])+'</option>';}).join('');
+  const cnt = ['10','20','30','50'].map(function(c){return '<option value="'+c+'"'+(SETUP.count===c?' selected':'')+'>'+c+' questions</option>';}).join('');
+  const desc = {
+    choose:'See the English meaning, pick the German word.',
+    meaning:'See the German word, pick the English meaning.',
+    write:'See the English meaning, type the German word. Include der, die or das for nouns.',
+    listen:'Hear the word, type it. Needs a German voice on your device.',
+    article:'See a noun, pick der, die or das.'
+  };
+  const types = Object.keys(QTYPES).map(function(k){
+    return '<label class="chk"><input type="checkbox" data-type="'+k+'"'+(SETUP.types[k]?' checked':'')+'><span>'+QTYPES[k].label+'<small>'+desc[k]+'</small></span></label>';
+  }).join('');
+  examzone.innerHTML = '<div class="box"><h2>Exam</h2><p class="lead">Every question has its own Check button, so you see the answer straight away.</p>' +
+    '<div class="setup-row"><label class="fld">Theme<select id="xtheme">'+themeOpts+'</select></label>' +
+    '<label class="fld">Length<select id="xcount">'+cnt+'</select></label></div>' +
+    '<div class="types" id="xtypes">'+types+'</div>' +
+    (note ? '<p class="fb no" role="alert">'+esc(note)+'</p>' : '') +
+    '<button class="btn primary" type="button" data-x="start">Start exam</button></div>';
+}
+function typeLabel(q){return QTYPES[q.type].label;}
+function promptHtml(q){
+  const w = q.w;
+  const pic = w.em ? '<div class="pic" aria-hidden="true">'+w.em+'</div>' : '';
+  if(q.type==='choose' || q.type==='write'){
+    return '<div class="prompt">'+pic+'<div class="ask">'+(q.type==='choose'?'Which German word means':'Write the German word for')+'</div><div class="big">'+esc(w.enc)+(w.at?' <span class="at">AT</span>':'')+'</div></div>';
+  }
+  if(q.type==='meaning'){
+    return '<div class="prompt">'+pic+'<div class="ask">What does this mean?</div><div class="big">'+deHtml(w)+(w.at?' <span class="at">AT</span>':'')+'</div><div style="margin-top:10px"><button class="btn" type="button" data-x="sound">'+ICON_SOUND+'Hear</button></div></div>';
+  }
+  if(q.type==='article'){
+    return '<div class="prompt">'+pic+'<div class="ask">Choose the article for</div><div class="big">'+esc(w.noun)+(w.at?' <span class="at">AT</span>':'')+'</div><div class="sub" style="margin-top:2px">'+esc(w.enc)+'</div></div>';
+  }
+  return '<div class="prompt"><div class="ask">Listen and write what you hear</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px"><button class="btn" type="button" data-x="sound">'+ICON_SOUND+'Play</button><button class="btn" type="button" data-x="slow">'+ICON_SLOW+'Slowly</button></div></div>';
+}
+function renderQuestion(){
+  const q = ex.qs[ex.i]; const total = ex.qs.length;
+  let body = '';
+  if(q.type==='choose'){
+    body = '<div class="opts" role="radiogroup" aria-label="Answers">' + q.options.map(function(o,k){
+      return '<button type="button" class="opt" role="radio" aria-checked="false" data-opt="'+k+'"><kbd>'+(k+1)+'</kbd><span>'+deHtml(o)+(o.at?' <span class="at">AT</span>':'')+'</span></button>';
+    }).join('') + '</div>';
+  } else if(q.type==='meaning'){
+    body = '<div class="opts" role="radiogroup" aria-label="Answers">' + q.options.map(function(o,k){
+      return '<button type="button" class="opt" role="radio" aria-checked="false" data-opt="'+k+'"><kbd>'+(k+1)+'</kbd><span>'+esc(o)+'</span></button>';
+    }).join('') + '</div>';
+  } else if(q.type==='article'){
+    body = '<div class="opts art" role="radiogroup" aria-label="Articles">' + q.options.map(function(o,k){
+      return '<button type="button" class="opt" role="radio" aria-checked="false" data-opt="'+k+'"><span class="'+o+'">'+o+'</span></button>';
+    }).join('') + '</div>';
+  } else {
+    body = '<label class="sr" for="answer">Your answer</label><input type="text" id="answer" class="answer" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Type the German word">';
+  }
+  examzone.innerHTML = '<div class="box"><div class="qhead"><span class="qtype">'+typeLabel(q)+'</span><span>Question '+(ex.i+1)+' of '+total+' · Correct so far: '+ex.score+'</span></div>' +
+    '<div class="track" style="margin:-2px 0 14px"><div class="fill" style="width:'+Math.round(ex.i/total*100)+'%"></div></div>' +
+    promptHtml(q) + body + '<div id="fb" aria-live="polite"></div>' +
+    '<div class="actions"><button class="btn primary" type="button" id="checkbtn" data-x="check" disabled>Check</button></div></div>';
+  ex.checked = false; ex.sel = null;
+  const inp = document.getElementById('answer');
+  if(inp){
+    inp.addEventListener('input', function(){document.getElementById('checkbtn').disabled = !inp.value.trim();});
+    if(q.type==='listen') speak(q.w.de,false);
+    inp.focus({preventScroll:true});
+  }
+}
+function correctAnswerHtml(q){
+  if(q.type==='meaning') return esc(q.w.enc.replace(' (Austrian)',''));
+  if(q.type==='article') return '<span class="'+q.w.art+'">'+q.w.art+'</span> '+esc(q.w.noun);
+  return deHtml(q.w);
+}
+function doCheck(){
+  const q = ex.qs[ex.i]; if(ex.checked) return;
+  let ok = false, note = '', given = '';
+  if(q.options){
+    if(ex.sel===null) return;
+    ok = ex.sel===q.correct;
+    given = (q.type==='choose') ? q.options[ex.sel].de : q.options[ex.sel];
+    const btns = examzone.querySelectorAll('.opt');
+    btns.forEach(function(b,k){
+      b.disabled = true;
+      if(k===q.correct) b.classList.add('right');
+      else if(k===ex.sel) b.classList.add('wrong');
+    });
+  } else {
+    const inp = document.getElementById('answer'); given = inp.value.trim();
+    const r = checkWrite(given, q.accepted); ok = r.ok; note = r.note;
+    inp.readOnly = true; inp.classList.add(ok?'right':'wrong');
+  }
+  ex.checked = true; if(ok) ex.score++;
+  ex.res.push({q:q, ok:ok, given:given});
+  const w = q.w;
+  let html = '<div class="fb '+(ok?'ok':'no')+'"><h3>'+(ok?'Correct':'Not quite')+'</h3>';
+  if(!ok) html += '<p>Right answer: <span class="corr">'+correctAnswerHtml(q)+'</span></p>';
+  else if(q.type==='write'||q.type==='listen') html += '<p><span class="corr">'+deHtml(w)+'</span></p>';
+  if(note) html += '<p>'+esc(note)+'</p>';
+  html += '<p class="sub">'+deHtml(w)+' = '+esc(w.enc.replace(' (Austrian)',''))+'</p>';
+  if(q.accepted && q.accepted.length>1){
+    const alt = q.accepted.filter(function(a){return a!==w;}).map(function(a){return a.de;});
+    if(alt.length) html += '<p class="sub">Also accepted: '+esc(alt.join(', '))+'</p>';
+  }
+  html += '<p style="margin-top:8px"><button class="btn" type="button" data-x="sound">'+ICON_SOUND+'Hear it</button></p></div>';
+  document.getElementById('fb').innerHTML = html;
+  const cb = document.getElementById('checkbtn');
+  cb.disabled = false; cb.setAttribute('data-x','next'); cb.textContent = (ex.i+1>=ex.qs.length) ? 'See results' : 'Next question';
+  cb.focus({preventScroll:true});
+}
+function nextQ(){
+  ex.i++;
+  if(ex.i>=ex.qs.length) renderResults(); else renderQuestion();
+}
+function renderResults(){
+  ex.phase = 'done';
+  const total = ex.qs.length; const pct = total ? Math.round(ex.score/total*100) : 0;
+  const missed = ex.res.filter(function(r){return !r.ok;});
+  const list = missed.map(function(r){
+    const q = r.q; const w = q.w;
+    let p = '';
+    if(q.type==='choose'||q.type==='write') p = esc(w.enc);
+    else if(q.type==='meaning') p = deHtml(w);
+    else if(q.type==='article') p = esc(w.noun);
+    else p = 'Listening';
+    return '<li><small>'+typeLabel(q)+' · '+p+'</small><span>Your answer: '+(r.given?esc(r.given):'(empty)')+'</span><span>Correct: <strong>'+correctAnswerHtml(q)+'</strong></span></li>';
+  }).join('');
+  examzone.innerHTML = '<div class="box"><h2>Result</h2><div class="score">'+ex.score+' / '+total+'</div><p class="lead">'+pct+'% correct. ' +
+    (pct>=80 ? 'Strong result.' : pct>=50 ? 'Good start. Review the mistakes below.' : 'Go through the flashcards for this theme, then try again.') + '</p>' +
+    (missed.length ? '<h3 style="margin:8px 0 0;font-size:1rem">Mistakes ('+missed.length+')</h3><ul class="miss">'+list+'</ul>' : '<p>No mistakes.</p>') +
+    '<div class="actions">' + (missed.length ? '<button class="btn primary" type="button" data-x="retry">Repeat mistakes</button>' : '') +
+    '<button class="btn" type="button" data-x="again">New exam</button></div></div>';
+}
+function startQuiz(qs){
+  ex.phase='run'; ex.qs=qs; ex.i=0; ex.score=0; ex.res=[]; renderQuestion();
+}
+examzone.addEventListener('click', function(e){
+  const opt = e.target.closest('[data-opt]');
+  if(opt && !ex.checked){
+    ex.sel = parseInt(opt.getAttribute('data-opt'),10);
+    examzone.querySelectorAll('.opt').forEach(function(b){b.setAttribute('aria-checked', b===opt);});
+    document.getElementById('checkbtn').disabled = false; return;
+  }
+  const b = e.target.closest('[data-x]'); if(!b) return;
+  const x = b.getAttribute('data-x');
+  if(x==='start'){
+    SETUP.theme = document.getElementById('xtheme').value; SETUP.count = document.getElementById('xcount').value;
+    const types = [];
+    examzone.querySelectorAll('#xtypes input').forEach(function(i){ SETUP.types[i.getAttribute('data-type')] = i.checked; if(i.checked) types.push(i.getAttribute('data-type')); });
+    if(!types.length){ renderSetup('Choose at least one question type.'); return; }
+    const qs = buildQuiz(parseInt(SETUP.theme,10), parseInt(SETUP.count,10), types);
+    if(!qs.length){ renderSetup('This theme has no words for the chosen question types. Pick another theme or type.'); return; }
+    startQuiz(qs);
+  }
+  else if(x==='check') doCheck();
+  else if(x==='next') nextQ();
+  else if(x==='sound'){ const q = ex.qs[ex.i]; if(q) speak(q.w.de,false); }
+  else if(x==='slow'){ const q = ex.qs[ex.i]; if(q) speak(q.w.de,true); }
+  else if(x==='retry'){
+    const pool = WORDS;
+    const qs = ex.res.filter(function(r){return !r.ok;}).map(function(r){return makeQuestion(r.q.type, r.q.w, WORDS.filter(function(w){return SETUP.theme==='-1' || String(w.t)===SETUP.theme;}));});
+    startQuiz(shuffle(qs));
+  }
+  else if(x==='again'){ ex.phase='setup'; renderSetup(); }
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown', function(e){
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const tag = (e.target.tagName||'').toLowerCase();
+  if(!panelExam.hidden){
+    if(ex.phase!=='run') return;
+    if(e.key==='Enter'){
+      if(tag==='button' && e.target.id!=='checkbtn') return;
+      e.preventDefault();
+      const cb = document.getElementById('checkbtn'); if(cb && !cb.disabled) cb.click();
+    } else if(!ex.checked && tag!=='input' && /^[1-4]$/.test(e.key)){
+      const o = examzone.querySelectorAll('.opt')[parseInt(e.key,10)-1]; if(o) o.click();
+    }
+    return;
+  }
+  if(tag==='input' || tag==='select' || tag==='textarea') return;
+  if(e.key==='ArrowRight'){ go(1); }
+  else if(e.key==='ArrowLeft'){ go(-1); }
+  else if(e.key===' ' && tag!=='button'){ e.preventDefault(); const c = document.getElementById('thecard'); if(c) c.click(); }
+  else if(e.key==='s' || e.key==='S'){ const w = currentWord(); if(w) speak(w.de,false); }
+});
+
+/* ---------- start ---------- */
+buildDeck();
+renderSetup();
+</script>
+
+</body></html>
